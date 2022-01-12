@@ -68,6 +68,7 @@ export default class ApiController {
 		}
 		catch (e) {
 			const error = e.toString();
+			console.log('Ошибка', e, error);
 			return response.status(500).json({ error });
 		}
 	}
