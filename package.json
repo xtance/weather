@@ -5,8 +5,8 @@
 	"scripts": {
 		"back": "node ace serve --watch",
 		"front": "rollup -c -w",
-		"build-win": "node ace build --production && cd build && npm ci --production && copy .env build && (forever restart server.js || forever start server.js)",
-		"build-linux": "node ace build --production && cd build && npm ci --production && cp .env build && (forever restart server.js || forever start server.js)"
+		"build-win": "node ace build --production && copy .env build && cd build && npm ci --production && (forever restart server.js || forever start server.js)",
+		"build-linux": "node ace build --production && cp .env build && cd build && npm ci --production && (forever restart server.js || forever start server.js)"
 	},
 	"devDependencies": {
 		"@adonisjs/assembler": "^5.3.9",
