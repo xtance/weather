@@ -26,6 +26,21 @@ export default class ApiController {
 		}
 	}
 
+	/* Метод получения погоды */
+	public async weather({ request, response }: HttpContextContract) {
+		try {
+			const token = this.getToken();
+			const city = this.getCity(request);
+			const data = await this.getWeatherData(city, token);
+			return response.status(200).json(data);
+		}
+		catch (e) {
+			const error = e.toString();
+			console.log('Ошибка', e, error);
+			return response.status(500).json({ error });
+		}
+	}
+
 	private getToken(): string {
 		const token = Env.get('OWM_TOKEN');
 		if (!token) throw new Error('Отсутствует токен');
@@ -56,20 +71,5 @@ export default class ApiController {
 				units: 'metric',
 			}
 		});
-	}
-
-	/* Метод получения погоды */
-	public async weather({ request, response }: HttpContextContract) {
-		try {
-			const token = this.getToken();
-			const city = this.getCity(request);
-			const data = await this.getWeatherData(city, token);
-			return response.status(200).json(data);
-		}
-		catch (e) {
-			const error = e.toString();
-			console.log('Ошибка', e, error);
-			return response.status(500).json({ error });
-		}
 	}
 }

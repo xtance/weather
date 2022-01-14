@@ -2,7 +2,6 @@
 import Center from "./Center.svelte";
 import Container from "./Container.svelte";
 import Item from "./Item.svelte";
-import LeftPanel from "./Panel.svelte";
 import List from "./List.svelte";
 import Logo from "./Logo.svelte";
 import Panel from "./Panel.svelte";
@@ -74,7 +73,7 @@ const showWeather = async () => {
 
 <Container>
 
-	<LeftPanel>
+	<Panel>
 
 		<Logo title="Прогноз погоды" subtitle={currentCity || "Выберите город"} />
 
@@ -104,7 +103,7 @@ const showWeather = async () => {
 			<SimpleButton text="Показать погоду" on:click={showWeather} />
 		</div>
 		
-	</LeftPanel>
+	</Panel>
 
 
 	<Panel>
