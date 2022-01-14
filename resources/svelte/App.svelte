@@ -39,8 +39,6 @@ const setWeather = (obj) => {
 		'Влажность': `${main.humidity} %`,
 		'Скорость ветра': `${wind.speed} м/с`,
 		'Направление ветра': `${wind.deg} °`,
-		'test': 'test',
-		'test2': 'test2'
 	};
 }
 
