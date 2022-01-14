@@ -9,7 +9,7 @@ import Panel from "./Panel.svelte";
 import SimpleButton from "./SimpleButton.svelte";
 
 const API_URL = `${window.location.href}api`;
-const CITIES = ['Москва', 'Санкт-Петербург', 'Лондон', 'Париж'];
+const CITIES = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Нижний Новгород', 'Самара', 'Омск', 'Казань', 'Челябинск', 'Ростов-на-Дону', 'Уфа', 'Волгоград', 'Красноярск', 'Воронеж', 'Пермь'];
 
 let currentCity = null;
 let weatherParams = null;
@@ -47,7 +47,7 @@ const setCity = (name) => {
 
 const showWeather = async () => {
 	try {
-		
+
 		if (!currentCity) {
 			throw new Error('Вначале выберите город');
 		}

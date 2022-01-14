@@ -922,7 +922,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			if (default_slot) default_slot.c();
-    			attr_dev(div, "class", "w-full md:w-96 flex flex-col justify-between bg-gray-800 text-white shadow-panel stroke z-[1] ");
+    			attr_dev(div, "class", "w-full md:w-96 h-screen flex flex-col justify-between bg-gray-800 text-white shadow-panel stroke z-[1] ");
     			add_location(div, file$4, 1, 0, 23);
     		},
     		l: function claim(nodes) {
@@ -1412,7 +1412,7 @@ var app = (function () {
     		c: function create() {
     			input = element("input");
     			attr_dev(input, "class", "w-9/12 flex-grow bg-white/25 px-2 rounded outline-none ");
-    			add_location(input, file, 79, 4, 1862);
+    			add_location(input, file, 79, 4, 2004);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -1676,7 +1676,7 @@ var app = (function () {
     			div = element("div");
     			create_component(simplebutton.$$.fragment);
     			attr_dev(div, "class", "p-4");
-    			add_location(div, file, 99, 2, 2241);
+    			add_location(div, file, 99, 2, 2383);
     		},
     		m: function mount(target, anchor) {
     			mount_component(logo, target, anchor);
@@ -1743,7 +1743,7 @@ var app = (function () {
     			p = element("p");
     			t = text(/*notification*/ ctx[2]);
     			attr_dev(p, "class", "text-center p-4");
-    			add_location(p, file, 120, 3, 2612);
+    			add_location(p, file, 120, 3, 2754);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -2010,7 +2010,7 @@ var app = (function () {
     			t1 = space();
     			div = element("div");
     			attr_dev(div, "class", "p-4");
-    			add_location(div, file, 125, 2, 2678);
+    			add_location(div, file, 125, 2, 2820);
     		},
     		m: function mount(target, anchor) {
     			mount_component(logo, target, anchor);
@@ -2219,7 +2219,25 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
     	const API_URL = `${window.location.href}api`;
-    	const CITIES = ['Москва', 'Санкт-Петербург', 'Лондон', 'Париж'];
+
+    	const CITIES = [
+    		'Москва',
+    		'Санкт-Петербург',
+    		'Новосибирск',
+    		'Екатеринбург',
+    		'Нижний Новгород',
+    		'Самара',
+    		'Омск',
+    		'Казань',
+    		'Челябинск',
+    		'Ростов-на-Дону',
+    		'Уфа',
+    		'Волгоград',
+    		'Красноярск',
+    		'Воронеж',
+    		'Пермь'
+    	];
+
     	let currentCity = null;
     	let weatherParams = null;
     	let notification = 'Выберите город в панели слева, чтобы отобразить параметры';
