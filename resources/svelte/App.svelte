@@ -13,6 +13,7 @@ const CITIES = ['Москва', 'Санкт-Петербург', 'Новосиб
 
 let currentCity = null;
 let weatherParams = null;
+let weatherIcon = null;
 let notification = 'Выберите город в панели слева, чтобы отобразить параметры';
 
 const setNotification = (str) => {
@@ -27,6 +28,8 @@ const setWeather = (obj) => {
 
 	const wind = obj.wind;
 	if (!main) return setNotification('Отсутствует объект ветра');
+
+	weatherIcon =  obj.weather[0]?.icon || '';
 
 	weatherParams = {
 		'Температура': `${main.temp} °C`,
@@ -59,7 +62,7 @@ const showWeather = async () => {
 			throw new Error(json.error);
 		}
 
-		weatherParams = null;
+		weatherParams = weatherIcon = null;
 		setWeather(json);
 	}
 	catch (e) {
@@ -123,8 +126,10 @@ const showWeather = async () => {
 			</p>
 		{/if}
 
-		<div class="p-4">
-			
+		<div class="flex justify-center">
+			{#if weatherIcon}
+				<img alt="Иконка" src="http://openweathermap.org/img/wn/{weatherIcon}@2x.png" />
+			{/if}
 		</div>
 
 	</Panel>
