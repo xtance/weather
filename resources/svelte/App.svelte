@@ -8,8 +8,8 @@ import Logo from "./Logo.svelte";
 import Panel from "./Panel.svelte";
 import SimpleButton from "./SimpleButton.svelte";
 
-const endPoint = `${window.location.href}api`;
-const cities = ['London', 'Moscow'];
+const API_URL = `${window.location.href}api`;
+const CITIES = ['Москва', 'Санкт-Петербург', 'Лондон', 'Париж'];
 
 let currentCity = null;
 let weatherParams = null;
@@ -21,8 +21,6 @@ const setNotification = (str) => {
 }
 
 const setWeather = (obj) => {
-
-	weatherParams = null;
 
 	const main = obj.main;
 	if (!main) return setNotification('Отсутствует объект температуры');
@@ -49,10 +47,19 @@ const setCity = (name) => {
 
 const showWeather = async () => {
 	try {
-		if (!currentCity) throw('Вначале выберите город');
-		const response = await fetch(`${endPoint}/weather/${currentCity}`, { method: 'POST' });
+		
+		if (!currentCity) {
+			throw new Error('Вначале выберите город');
+		}
+
+		const response = await fetch(`${API_URL}/weather/${currentCity}`, { method: 'POST' });
 		const json = await response.json();
-		if (json.error) throw(json.error);
+
+		if (json.error) {
+			throw new Error(json.error);
+		}
+
+		weatherParams = null;
 		setWeather(json);
 	}
 	catch (e) {
@@ -80,7 +87,7 @@ const showWeather = async () => {
 					"
 				/>
 			</Item>
-			{#each cities as city, index}
+			{#each CITIES as city, index}
 				<Item
 					leftText={city}
 					rightText={city === currentCity ? '✔' : '•'}
