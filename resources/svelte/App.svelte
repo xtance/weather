@@ -20,25 +20,17 @@ const setNotification = (str) => {
 	notification = str;
 }
 
-const setWeather = (obj) => {
-
-	const main = obj.main;
-	if (!main) return setNotification('Отсутствует объект температуры');
-
-	const wind = obj.wind;
-	if (!main) return setNotification('Отсутствует объект ветра');
-
-	weatherIcon =  obj.weather[0]?.icon || '';
-
+const setWeather = (weather) => {
+	weatherIcon =  weather.icon || '';
 	weatherParams = {
-		'Температура': `${main.temp} °C`,
-		'Ощущается как': `${main.feels_like} °C`,
-		'Минимум': `${main.temp_min} °C`,
-		'Максимум': `${main.temp_max} °C`,
-		'Давление': `${main.pressure} мм рт. ст.`,
-		'Влажность': `${main.humidity} %`,
-		'Скорость ветра': `${wind.speed} м/с`,
-		'Направление ветра': `${wind.deg} °`,
+		'Температура': `${weather.temp} °C`,
+		'Ощущается как': `${weather.feels_like} °C`,
+		'Минимум': `${weather.temp_min} °C`,
+		'Максимум': `${weather.temp_max} °C`,
+		'Давление': `${weather.pressure} мм рт. ст.`,
+		'Влажность': `${weather.humidity} %`,
+		'Скорость ветра': `${weather.speed} м/с`,
+		'Направление ветра': `${weather.deg} °`,
 	};
 }
 
@@ -56,6 +48,7 @@ const showWeather = async () => {
 
 		const response = await fetch(`${API_URL}/weather/${currentCity}`, { method: 'POST' });
 		const json = await response.json();
+		console.log('JSON', json);
 
 		if (json.error) {
 			throw new Error(json.error);

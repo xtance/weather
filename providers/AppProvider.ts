@@ -16,7 +16,7 @@ export default class AppProvider {
 
 	public async ready() {
 		// App is ready
-		const telegram = new Telegram();
+		new Telegram();
 	}
 
 	public async shutdown() {

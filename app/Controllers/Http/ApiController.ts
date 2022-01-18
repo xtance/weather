@@ -3,6 +3,18 @@ import { RequestContract } from '@ioc:Adonis/Core/Request';
 import Env from '@ioc:Adonis/Core/Env';
 import axios from 'axios';
 
+interface IWeather {
+	temp: number;
+	feels_like: number;
+	temp_min: number;
+	temp_max: number;
+	pressure: number;
+	humidity: number;
+	speed: number;
+	deg: number;
+	icon: string;
+}
+
 export default class ApiController {
 
 	private static API = 'http://api.openweathermap.org/data/2.5/weather';
@@ -26,12 +38,11 @@ export default class ApiController {
 		}
 	}
 
-	/* Метод получения погоды */
-	public async weather({ request, response }: HttpContextContract) {
+	/* Метод получения погоды по HTTP */
+	public async getWeatherHTTP({ request, response }: HttpContextContract) {
 		try {
-			const token = this.getToken();
 			const city = this.getCity(request);
-			const data = await this.getWeatherData(city, token);
+			const data = await this.getWeather(city);
 			return response.status(200).json(data);
 		}
 		catch (e) {
@@ -39,6 +50,14 @@ export default class ApiController {
 			console.log('Ошибка', e, error);
 			return response.status(500).json({ error });
 		}
+	}
+
+	/* Общий метод получения объекта погоды */
+	public async getWeather(city: string){
+		const token = this.getToken();
+		const data = await this.getRawWeather(city, token);
+		const parsed = this.getParsedWeather(data);
+		return parsed;
 	}
 
 	private getToken(): string {
@@ -53,16 +72,9 @@ export default class ApiController {
 		return city;
 	}
 
-	private async getWeatherData(city: string, token: string) {
-		const response = await this.requestWeather(city, token);
-		if (response.status !== 200) throw new Error(`Статус ${response.status}`);
-		if (!response.data) throw new Error('Отсутствуют данные о погоде');
-		return response.data;
-	}
-
-	private requestWeather(city: string, token: string) {
-		if (ApiController.TEST_WEATHER) return ApiController.TEST_DATA;
-		return axios({
+	/* Возвращает объект погоды как из апи */
+	private getRawWeather(city: string, token: string) {
+		return ApiController.TEST_WEATHER ? ApiController.TEST_DATA : axios({
 			method: 'GET',
 			url: ApiController.API,
 			params: {
@@ -71,5 +83,32 @@ export default class ApiController {
 				units: 'metric',
 			}
 		});
+	}
+
+	/* Возвращает распарсенную погоду */
+	private getParsedWeather(data: any) : IWeather {
+
+		const obj = data.data;
+		if (!obj) throw new Error('Отсутствует объект данных'); 
+
+		const main = obj.main;
+		if (!main) throw new Error('Отсутствует объект температуры');
+
+		const wind = obj.wind;
+		if (!wind) throw new Error('Отсутствует объект ветра');
+
+		const icon = obj.weather[0]?.icon || '';
+
+		return {
+			temp: main.temp,
+			feels_like: main.feels_like,
+			temp_min: main.temp_min,
+			temp_max: main.temp_max,
+			pressure: main.pressure,
+			humidity: main.humidity,
+			speed: wind.speed,
+			deg: wind.deg,
+			icon: icon,
+		}
 	}
 }
