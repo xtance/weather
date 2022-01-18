@@ -37,8 +37,6 @@ export default class Command {
 		const first = (space === -1) ? str.slice(1) : str.slice(1, space);
 		const rest = (space === -1) ? '' : str.slice(space, str.length);
 
-		console.log('ssss', first, rest);
-
 		const cmd = Command.getCommand(first);
         if (!cmd) return Promise.resolve('Такая команда отсутствует');
 

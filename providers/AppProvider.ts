@@ -15,12 +15,11 @@ export default class AppProvider {
 	}
 
 	public async ready() {
-		// App is ready
+		/* Бот создаётся один раз вместе с приложением */
 		new Telegram();
 	}
 
 	public async shutdown() {
-		console.log('done');
 		// Cleanup, since app is going down
 	}
 }
