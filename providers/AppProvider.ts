@@ -16,7 +16,8 @@ export default class AppProvider {
 
 	public async ready() {
 		/* Бот создаётся один раз вместе с приложением */
-		new Telegram();
+		const telegram = new Telegram();
+		telegram.start();
 	}
 
 	public async shutdown() {

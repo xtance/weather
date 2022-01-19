@@ -40,27 +40,34 @@ export default class Telegram {
 		this.createOffsetFile();
 		this.offset = this.getLastOffset();
 		this.log('Последнее обновление:', this.offset);
-		this.getUpdates();
 	}
 
-	private async getUpdates(){
-		const updates: IUpdate[] = await this.request('getUpdates', {
+	/* Запускает цикл получения обновлений */
+	public async start(){
+		while (true) {
+
+			const updates = await this.getUpdates();
+			this.log('Обновления', updates);
+
+			if (!Array.isArray(updates)) throw Error('Фатальная ошибка - не пришли обновления.');
+			this.handleUpdates(updates);
+			this.setLastOffset(this.offset);
+		}
+	}
+
+	private getUpdates() : Promise<IUpdate[]> {
+		return this.request('getUpdates', {
 			offset: this.offset + 1,
 			allowed_updates: 'message',
 			timeout: Telegram.TIMEOUT_MS,
 		});
-		this.handleUpdates(updates);
-		this.log('Обновления', updates);
 	}
 
 	private async handleUpdates(updates: IUpdate[]){
-		if (!Array.isArray(updates)) throw Error('Фатальная ошибка - не пришли обновления.');
 		updates.forEach(update => {
 			if (update.update_id) this.offset = Math.max(this.offset, update.update_id);
 			if (update.message) this.handleMessage(update.message);
 		});
-		this.setLastOffset(this.offset);
-		this.getUpdates();
 	}
 
 	private async handleMessage(message: IMessage){
