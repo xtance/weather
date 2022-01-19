@@ -31,6 +31,7 @@ export default class Telegram {
 	private static LOG_PREFIX = '[Telegram]';
 	private static CMD_PREFIX = '/';
 	private static TIMEOUT_MS = 10000;
+	private static MAX_DATE_MS = 5000;
 
 	/* Значение оффсета хранится как в файле, так и в памяти, чтобы не считывать каждый раз */
 	private offset: number;
@@ -67,10 +68,11 @@ export default class Telegram {
 		const text = String(message.text);
 		this.log('Пришло сообщение!', text);
 
-		if (text.startsWith(Telegram.CMD_PREFIX)){
-			const answer = await Command.execute(text);
-			this.sendMessage(answer, message.chat.id);
-		}
+		if (!this.isMessageRecent(message)) return;
+		if (!text.startsWith(Telegram.CMD_PREFIX)) return;
+
+		const answer = await Command.execute(text);
+		this.sendMessage(answer, message.chat.id);
 	}
 
 	private sendMessage(text: string, chat_id: number){
@@ -86,6 +88,13 @@ export default class Telegram {
 		const buffer = fs.readFileSync(path);
 		const offset = buffer.toString();
 		return Number(offset) || 0;
+	}
+
+	private isMessageRecent(message: IMessage){
+		const seconds = message.date || 0;
+		const ms = seconds * 1000;
+		const now = +(new Date());
+		return Math.abs(now - ms) < Telegram.MAX_DATE_MS;
 	}
 
 	private setLastOffset(offset: number){
